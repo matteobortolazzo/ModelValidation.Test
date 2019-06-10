@@ -77,8 +77,12 @@ public void Test_Stormtrooper()
 }
 ```
 
-## When test fails
+## Extensions methods
 
-* Validation do not fails after changing properties values;
-* Create valid model function return an invalid model;
-* Not all attributes fails at least with one provided property value.
+There are a some built-in extension methods to help writing properties tests faster:
+
+* `ps.IsRequired()`
+* `ps.HasMaxLenght(int)`
+* `ps.HasMinLenght(int)`
+* `ps.InRange(int, int)`
+* `ps.InRange(double, double)`
