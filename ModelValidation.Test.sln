@@ -7,7 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelValidation.Test", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8FC4298-7E39-405B-89FA-FA0A63CAA24A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsModelValidation.Test", "test\TestsModelValidation.Test\TestsModelValidation.Test.csproj", "{9DEA572C-BF9F-42F3-A05B-E75C9BD57F79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsModelValidation.Test", "test\TestsModelValidation.Test\TestsModelValidation.Test.csproj", "{9DEA572C-BF9F-42F3-A05B-E75C9BD57F79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{AC1C933B-119E-453A-8383-6D925839CB48}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		LATEST_CHANGE.md = LATEST_CHANGE.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

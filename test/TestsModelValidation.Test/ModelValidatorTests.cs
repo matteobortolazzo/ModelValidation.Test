@@ -9,7 +9,7 @@ namespace TestsModelValidation.Test
     public class ModelValidatorTests
     {
         [Fact]
-        public void Complete()
+        public void Complete_Succeed()
         {
             ModelValidator.Test(
                 () => new Rebel
