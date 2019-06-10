@@ -29,6 +29,26 @@ namespace TestsModelValidation.Test
         }
 
         [Fact]
+        public void RequiredAttributeNotTested_Throws_ValidationAttributeNotTestedException()
+        {
+            _ = Assert.Throws<ValidationAttributeNotTestedException>(() =>
+            {
+                ModelValidator.Test(
+                   () => new Rebel
+                   {
+                       Name = "Luke",
+                       Surname = "Skywalker",
+                       Age = 18
+                   },
+                   modelSetup =>
+                   {
+                       modelSetup.CheckProperty(r => r.Name, ps => ps
+                           .IsInvalidWith("01234567890")); // MaxLenght
+                   });
+            });
+        }
+
+        [Fact]
         public void InvalidModelFunction_Throws_ModelIsInvalidException()
         {
             _ = Assert.Throws<ModelIsInvalidException>(() =>
