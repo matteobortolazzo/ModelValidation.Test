@@ -28,7 +28,7 @@ namespace TestsModelValidation.Test
         [Fact]
         public void ObjectWrongMessage_Throws_ModelIsValidException()
         {
-            _ = Assert.Throws<ModelIsValidException>(() =>
+            _ = Assert.Throws<InvalidErrorMessageException>(() =>
                ModelValidator.Test(
                 () => new Stormtrooper
                 {
@@ -44,7 +44,7 @@ namespace TestsModelValidation.Test
         [Fact]
         public void PropertyWrongMessage_Throws_PropertyIsValidException()
         {
-            _ = Assert.Throws<PropertyIsValidException>(() =>
+            _ = Assert.Throws<InvalidErrorMessageException>(() =>
                ModelValidator.Test(
                 () => new Stormtrooper
                 {
@@ -88,7 +88,9 @@ namespace TestsModelValidation.Test
                    },
                    modelSetup =>
                    {
-                       modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith("Darth Vader"));
+                       modelSetup.CheckProperty(r => r.Leader, ps => ps
+                           .IsInvalidWith(null)            // Required
+                           .IsInvalidWith("Darth Vader")); // Valid
                    });
             });
         }

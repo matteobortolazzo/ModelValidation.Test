@@ -18,13 +18,13 @@ namespace ModelValidation.Test
     {
         private readonly Func<TModel> _createValidModelFunc;
         private readonly List<IModelObjectValidator> _objectValidators;
-        private readonly List<IModelPropertyValidator> _propertiesValidators;
+        private readonly List<(PropertyInfo PropertyInfo, IModelPropertyValidator Validator)> _propertiesValidators;
 
         public ModelTestSetup(Func<TModel> createValidModelFunc)
         {
             _createValidModelFunc = createValidModelFunc;
             _objectValidators = new List<IModelObjectValidator>();
-            _propertiesValidators = new List<IModelPropertyValidator>();
+            _propertiesValidators = new List<(PropertyInfo PropertyInfo, IModelPropertyValidator Validator)>();
         }
 
         public void CheckObject(Action<IModelObjectValidatorSetup<TModel>> setup, string expectedErrorMessage = null)
@@ -40,10 +40,10 @@ namespace ModelValidation.Test
             {
                 throw new ArgumentException("Selector must return a property.", nameof(selector));
             }
-
-            var validator = new ModelPropertyValidatorSetup<TModel, TProperty>(m.Member.Name);
+            PropertyInfo propertyInfo = typeof(TModel).GetProperty(m.Member.Name);
+            var validator = new ModelPropertyValidatorSetup<TModel, TProperty>(propertyInfo);
             setup(validator);
-            _propertiesValidators.Add(validator);
+            _propertiesValidators.Add((propertyInfo, validator));
         }
 
         public void Run()
@@ -56,16 +56,28 @@ namespace ModelValidation.Test
                 throw new ModelIsInvalidException("Object return by the creation function must be valid.");
             }
 
+            var classAttributes = typeof(TModel).GetCustomAttributes<ValidationAttribute>(true).ToList();
             foreach (IModelObjectValidator validator in _objectValidators)
             {
                 validator.RunTest(_createValidModelFunc());
             }
 
-            foreach (IModelPropertyValidator validator in _propertiesValidators)
+            foreach ((PropertyInfo PropertyInfo, IModelPropertyValidator Validator) in _propertiesValidators)
             {
-                foreach ((var Value, var Message) in validator.GetInvalidValues())
+                IReadOnlyCollection<(object Value, string Message)> invalidValues = Validator.GetInvalidValues();
+
+                var validationAttributes = PropertyInfo.GetCustomAttributes<ValidationAttribute>(true).ToList();
+                foreach (ValidationAttribute validationAttribute in validationAttributes)
                 {
-                    validator.RunTest(_createValidModelFunc(), Value, Message);
+                    if (invalidValues.All(property => validationAttribute.IsValid(property.Value)))
+                    {
+                        throw new ValidationAttributeNotTestedException($"{validationAttribute.GetType().Name} is not tested.");
+                    }
+                }
+
+                foreach ((var Value, var Message) in Validator.GetInvalidValues())
+                {
+                    Validator.RunTest(_createValidModelFunc(), Value, Message);
                 }
             }
         }

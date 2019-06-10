@@ -22,10 +22,10 @@ namespace ModelValidation.Test
         private readonly List<(object Value, string Message)> _propertiesValues;
         private readonly PropertyInfo _propertyInfo;
 
-        public ModelPropertyValidatorSetup(string propertyName)
+        public ModelPropertyValidatorSetup(PropertyInfo propertyInfo)
         {
             _propertiesValues = new List<(object Value, string Message)>();
-            _propertyInfo = typeof(TModel).GetProperty(propertyName);
+            _propertyInfo = propertyInfo;
         }
 
         public IReadOnlyCollection<(object Value, string Message)> GetInvalidValues()
@@ -52,13 +52,14 @@ namespace ModelValidation.Test
             }
 
             var propertyResults = validationResults.Where(r => r.MemberNames.Contains(_propertyInfo.Name)).ToList();
-            if (expectedErrorMessage == null && !propertyResults.Any())
+            if (!propertyResults.Any())
             {
                 throw new PropertyIsValidException($"Property {_propertyInfo.Name} must be invalid.");
             }
+
             if (expectedErrorMessage != null && !propertyResults.Any(r => r.ErrorMessage == expectedErrorMessage))
             {
-                throw new PropertyIsValidException($"Property {_propertyInfo.Name} must be invalid with error \"{expectedErrorMessage}\".");
+                throw new InvalidErrorMessageException($"Property {_propertyInfo.Name} must be invalid with error \"{expectedErrorMessage}\".");
             }
         }
     }

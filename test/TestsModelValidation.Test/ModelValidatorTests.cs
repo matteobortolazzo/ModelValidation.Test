@@ -59,7 +59,10 @@ namespace TestsModelValidation.Test
                    },
                    modelSetup =>
                    {
-                       modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith("Anakin"));
+                       modelSetup.CheckProperty(r => r.Name, ps => ps
+                           .IsInvalidWith(null)          // Required
+                           .IsInvalidWith("01234567890") // MaxLenght
+                           .IsInvalidWith("Anakin"));    // Valid
                    });
             });
         }
@@ -80,7 +83,10 @@ namespace TestsModelValidation.Test
                    modelSetup =>
                    {
                        modelSetup.CheckProperty(r => r.Age, ps => ps.IsInvalidWith(9));
-                       modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith("Anakin"));
+                       modelSetup.CheckProperty(r => r.Name, ps => ps
+                           .IsInvalidWith(null)          // Required
+                           .IsInvalidWith("01234567890") // MaxLenght
+                           .IsInvalidWith("Anakin"));    // Valid
                    });
             });
         }

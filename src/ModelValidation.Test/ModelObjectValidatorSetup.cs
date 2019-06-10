@@ -56,13 +56,15 @@ namespace ModelValidation.Test
                 throw new ModelIsValidException("The model with the given properties must be invalid.");
             }
 
-            if (_expectedErrorMessage == null && !validationResults.Any())
+            if (!validationResults.Any())
             {
+
                 throw new ModelIsValidException("The model with the given properties must be invalid.");
             }
+            
             if (_expectedErrorMessage != null && !validationResults.Any(r => r.ErrorMessage == _expectedErrorMessage))
             {
-                throw new ModelIsValidException($"The model with the given properties must be invalid with message \"{_expectedErrorMessage}\".");
+                throw new InvalidErrorMessageException($"The model with the given properties must be invalid with message \"{_expectedErrorMessage}\".");
             }
         }
     }
