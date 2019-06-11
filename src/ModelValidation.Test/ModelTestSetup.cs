@@ -11,7 +11,7 @@ namespace ModelValidation.Test
     public interface IModelTestSetup<TModel>
     {
         void CheckObject(Action<IModelObjectValidatorSetup<TModel>> setup, string expectedErrorMessage = null);
-        void CheckProperty<TProperty>(Expression<Func<TModel, TProperty>> selector, Action<IModelPropertyValidatorSetup<TModel, TProperty>> setup);
+        void CheckProperty<TProperty>(Expression<Func<TModel, TProperty>> selector, Action<IModelPropertyValidatorSetup<TModel, TProperty>> setup, bool checkAttributesCoverage = true);
     }
 
     internal class ModelTestSetup<TModel> : IModelTestSetup<TModel>
@@ -34,20 +34,33 @@ namespace ModelValidation.Test
             _objectValidators.Add(validator);
         }
 
-        public void CheckProperty<TProperty>(Expression<Func<TModel, TProperty>> selector, Action<IModelPropertyValidatorSetup<TModel, TProperty>> setup)
+        public void CheckProperty<TProperty>(Expression<Func<TModel, TProperty>> selector, Action<IModelPropertyValidatorSetup<TModel, TProperty>> setup, bool checkAttributesCoverage = true)
         {
             if (!(selector is LambdaExpression l) || !(l.Body is MemberExpression m))
             {
                 throw new ArgumentException("Selector must return a property.", nameof(selector));
             }
+
             PropertyInfo propertyInfo = typeof(TModel).GetProperty(m.Member.Name);
-            var validator = new ModelPropertyValidatorSetup<TModel, TProperty>(propertyInfo);
+            var validator = new ModelPropertyValidatorSetup<TModel, TProperty>(propertyInfo, checkAttributesCoverage);
             setup(validator);
             _propertiesValidators.Add((propertyInfo, validator));
         }
 
-        public void Run()
+        public void Run(bool checkPropertiesCoverage)
         {
+            if (checkPropertiesCoverage)
+            {
+                // Get all properties with validation attributes
+                var allProperties = typeof(TModel).GetProperties().Where(p => p.GetCustomAttributes<ValidationAttribute>(true).Any()).ToList();
+                var notTestedProperties = allProperties.Except(_propertiesValidators.Select(p => p.PropertyInfo)).ToList();
+
+                if (notTestedProperties.Any())
+                {
+                    throw new PropertiesNotTestedException($"One or more properties are not tested: {string.Join(", ", notTestedProperties.Select(p => p.Name))}.");
+                }
+            }
+
             TModel model = _createValidModelFunc();
             var isValid = Validator.TryValidateObject(model, new ValidationContext(model), null, true);
 
@@ -64,14 +77,16 @@ namespace ModelValidation.Test
 
             foreach ((PropertyInfo PropertyInfo, IModelPropertyValidator Validator) in _propertiesValidators)
             {
-                IReadOnlyCollection<(object Value, string Message)> invalidValues = Validator.GetInvalidValues();
-
-                var validationAttributes = PropertyInfo.GetCustomAttributes<ValidationAttribute>(true).ToList();
-                foreach (ValidationAttribute validationAttribute in validationAttributes)
+                if (Validator.CheckAttributesCoverage)
                 {
-                    if (invalidValues.All(property => validationAttribute.IsValid(property.Value)))
+                    IReadOnlyCollection<(object Value, string Message)> invalidValues = Validator.GetInvalidValues();
+                    var validationAttributes = PropertyInfo.GetCustomAttributes<ValidationAttribute>(true).ToList();
+                    foreach (ValidationAttribute validationAttribute in validationAttributes)
                     {
-                        throw new ValidationAttributeNotTestedException($"{validationAttribute.GetType().Name} is not tested.");
+                        if (invalidValues.All(property => validationAttribute.IsValid(property.Value)))
+                        {
+                            throw new ValidationAttributeNotTestedException($"{validationAttribute.GetType().Name} is not tested.");
+                        }
                     }
                 }
 

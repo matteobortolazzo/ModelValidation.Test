@@ -22,7 +22,8 @@ namespace TestsModelValidation.Test
                     modelSetup.CheckObject(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper must be a clone.");
 
                     modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Sith leader is required."));
-                }); ;
+                },
+                false); ;
         }
 
         [Fact]
@@ -30,31 +31,33 @@ namespace TestsModelValidation.Test
         {
             _ = Assert.Throws<InvalidErrorMessageException>(() =>
                ModelValidator.Test(
-                () => new Stormtrooper
-                {
-                    IsCloned = true,
-                    Leader = "Palpatine"
-                },
-                modelSetup =>
-                {
-                    modelSetup.CheckObject(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper should be a clone.");
-                }));
+                    () => new Stormtrooper
+                    {
+                        IsCloned = true,
+                        Leader = "Palpatine"
+                    },
+                    modelSetup =>
+                    {
+                        modelSetup.CheckObject(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper should be a clone.");
+                    },
+                    false));
         }
 
         [Fact]
         public void PropertyWrongMessage_Throws_PropertyIsValidException()
         {
             _ = Assert.Throws<InvalidErrorMessageException>(() =>
-               ModelValidator.Test(
-                () => new Stormtrooper
-                {
-                    IsCloned = true,
-                    Leader = "Palpatine"
-                },
-                modelSetup =>
-                {
-                    modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Leader is required."));
-                }));
+                ModelValidator.Test(
+                    () => new Stormtrooper
+                    {
+                        IsCloned = true,
+                        Leader = "Palpatine"
+                    },
+                    modelSetup =>
+                    {
+                        modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Leader is required."));
+                    },
+                    false));
         }
 
 
@@ -71,7 +74,8 @@ namespace TestsModelValidation.Test
                    },
                    modelSetup =>
                    {
-                   });
+                   },
+                   false);
             });            
         }
 
@@ -91,7 +95,8 @@ namespace TestsModelValidation.Test
                        modelSetup.CheckProperty(r => r.Leader, ps => ps
                            .IsInvalidWith(null)            // Required
                            .IsInvalidWith("Darth Vader")); // Valid
-                   });
+                   },
+                   false);
             });
         }
     }

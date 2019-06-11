@@ -24,6 +24,7 @@ namespace TestsModelValidation.Test
                     modelSetup.CheckObject(os => os.IsInvalidWith(r => r.Age, 42));
 
                     modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
+                    modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
                     modelSetup.CheckProperty(r => r.Age, ps => ps.IsInvalidWith(901).IsInvalidWith(9));
                 });
         }
@@ -44,7 +45,8 @@ namespace TestsModelValidation.Test
                    {
                        modelSetup.CheckProperty(r => r.Name, ps => ps
                            .IsInvalidWith("01234567890")); // MaxLenght
-                   });
+                   },
+                   false);
             });
         }
 
@@ -61,7 +63,8 @@ namespace TestsModelValidation.Test
                    },
                    modelSetup =>
                    {
-                   });
+                   },
+                   false);
             });            
         }
 
@@ -83,7 +86,8 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith(null)          // Required
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
-                   });
+                   },
+                   false);
             });
         }
 
@@ -107,7 +111,8 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith(null)          // Required
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
-                   });
+                   },
+                   false);
             });
         }
     }

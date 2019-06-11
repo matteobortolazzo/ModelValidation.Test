@@ -4,7 +4,7 @@ namespace ModelValidation.Test
 {
     public static class ModelValidator
     {
-        public static void Test<TModel>(Func<TModel> createValidModelFunc, Action<IModelTestSetup<TModel>> setupAction) where TModel : class
+        public static void Test<TModel>(Func<TModel> createValidModelFunc, Action<IModelTestSetup<TModel>> setupAction, bool checkPropertiesCoverage = true) where TModel : class
         {
             if (setupAction == null)
             {
@@ -13,7 +13,7 @@ namespace ModelValidation.Test
 
             var setup = new ModelTestSetup<TModel>(createValidModelFunc);
             setupAction(setup);
-            setup.Run();
+            setup.Run(checkPropertiesCoverage);
         }
     }
 }

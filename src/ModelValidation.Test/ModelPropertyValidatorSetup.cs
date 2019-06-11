@@ -8,6 +8,7 @@ namespace ModelValidation.Test
 {
     internal interface IModelPropertyValidator
     {
+        bool CheckAttributesCoverage { get; }
         void RunTest(object model, object value, string message);
         IReadOnlyCollection<(object Value, string Message)> GetInvalidValues();
     }
@@ -22,10 +23,11 @@ namespace ModelValidation.Test
         private readonly List<(object Value, string Message)> _propertiesValues;
         private readonly PropertyInfo _propertyInfo;
 
-        public ModelPropertyValidatorSetup(PropertyInfo propertyInfo)
+        public ModelPropertyValidatorSetup(PropertyInfo propertyInfo, bool checkAttributesCoverage)
         {
             _propertiesValues = new List<(object Value, string Message)>();
             _propertyInfo = propertyInfo;
+            CheckAttributesCoverage = checkAttributesCoverage;
         }
 
         public IReadOnlyCollection<(object Value, string Message)> GetInvalidValues()
@@ -38,6 +40,8 @@ namespace ModelValidation.Test
             _propertiesValues.Add((invalidValue, expectedErrorMessage));
             return this;
         }
+
+        public bool CheckAttributesCoverage { get; }
 
         public void RunTest(object model, object value, string expectedErrorMessage)
         {

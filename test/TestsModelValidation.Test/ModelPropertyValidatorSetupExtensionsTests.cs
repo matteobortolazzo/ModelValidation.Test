@@ -22,8 +22,9 @@ namespace TestsModelValidation.Test
                 },
                 modelSetup =>
                 {
-                    modelSetup.CheckProperty(r => r.Name, ps => ps.IsRequired().IsInvalidWith("Lukelongname"));
-                });
+                    modelSetup.CheckProperty(r => r.Name, ps => ps.IsRequired(), false);
+                },
+                false);
         }
 
         [Fact]
@@ -38,8 +39,9 @@ namespace TestsModelValidation.Test
                 },
                 modelSetup =>
                 {
-                    modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).HasMaxLenght(10));
-                });
+                    modelSetup.CheckProperty(r => r.Name, ps => ps.HasMaxLenght(10), false);
+                },
+                false);
         }
 
         [Fact]
@@ -55,7 +57,8 @@ namespace TestsModelValidation.Test
                 modelSetup =>
                 {
                     modelSetup.CheckProperty(r => r.Age, ps => ps.InRange(10, 900));
-                });
+                },
+                false);
         }
     }
 }
