@@ -20,13 +20,77 @@ namespace TestsModelValidation.Test
                 },
                 modelSetup => 
                 {
-                    modelSetup.CheckObject(os => os.IsInvalidWith(r => r.Surname, "Organa"));
-                    modelSetup.CheckObject(os => os.IsInvalidWith(r => r.Age, 42));
+                    modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Surname, "Organa"));
+                    modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Age, 42));
 
                     modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
                     modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
                     modelSetup.CheckProperty(r => r.Age, ps => ps.IsInvalidWith(901).IsInvalidWith(9));
                 });
+        }
+
+        [Fact]
+        public void NotTestingProperty_Throws_PropertiesNotTestedException()
+        {
+            _ = Assert.Throws<PropertiesNotTestedException>(() =>
+            {
+                ModelValidator.Test(
+                    () => new Rebel
+                    {
+                        Name = "Luke",
+                        Surname = "Skywalker",
+                        Age = 18
+                    },
+                    modelSetup =>
+                    {
+                        modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
+                        modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
+                    },
+                    true,
+                    false);
+            });
+        }
+
+        [Fact]
+        public void NotTestingClassAttribute_Throws_ValidationAttributeNotTestedException()
+        {
+            _ = Assert.Throws<ValidationAttributeNotTestedException>(() =>
+            {
+                ModelValidator.Test(
+                    () => new Rebel
+                    {
+                        Name = "Luke",
+                        Surname = "Skywalker",
+                        Age = 18
+                    },
+                    modelSetup =>
+                    {
+                    },
+                    false,
+                    true);
+            });
+        }
+
+
+        [Fact]
+        public void NotTestingPropertyAttribute_Throws_ValidationAttributeNotTestedException()
+        {
+            _ = Assert.Throws<ValidationAttributeNotTestedException>(() =>
+            {
+                ModelValidator.Test(
+                    () => new Rebel
+                    {
+                        Name = "Luke",
+                        Surname = "Skywalker",
+                        Age = 18
+                    },
+                    modelSetup =>
+                    {
+                        modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith("Lukelongname")); // Missing null check
+                    },
+                    false,
+                    false);
+            });
         }
 
         [Fact]
@@ -46,6 +110,7 @@ namespace TestsModelValidation.Test
                        modelSetup.CheckProperty(r => r.Name, ps => ps
                            .IsInvalidWith("01234567890")); // MaxLenght
                    },
+                   false,
                    false);
             });
         }
@@ -64,6 +129,7 @@ namespace TestsModelValidation.Test
                    modelSetup =>
                    {
                    },
+                   false,
                    false);
             });            
         }
@@ -87,6 +153,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
                    },
+                   false,
                    false);
             });
         }
@@ -112,6 +179,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
                    },
+                   false,
                    false);
             });
         }

@@ -19,34 +19,39 @@ namespace TestsModelValidation.Test
                 },
                 modelSetup =>
                 {
-                    modelSetup.CheckObject(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper must be a clone.");
+                    modelSetup.CheckClass(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper must be a clone.");
 
                     modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Sith leader is required."));
                 },
-                false); ;
+                false,
+                false);
         }
 
         [Fact]
         public void ObjectWrongMessage_Throws_ModelIsValidException()
         {
             _ = Assert.Throws<InvalidErrorMessageException>(() =>
-               ModelValidator.Test(
-                    () => new Stormtrooper
-                    {
-                        IsCloned = true,
-                        Leader = "Palpatine"
-                    },
-                    modelSetup =>
-                    {
-                        modelSetup.CheckObject(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper should be a clone.");
-                    },
-                    false));
+            {
+                ModelValidator.Test(
+                     () => new Stormtrooper
+                     {
+                         IsCloned = true,
+                         Leader = "Palpatine"
+                     },
+                     modelSetup =>
+                     {
+                         modelSetup.CheckClass(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper should be a clone.");
+                     },
+                     false,
+                     false);
+            });
         }
 
         [Fact]
         public void PropertyWrongMessage_Throws_PropertyIsValidException()
         {
             _ = Assert.Throws<InvalidErrorMessageException>(() =>
+            {
                 ModelValidator.Test(
                     () => new Stormtrooper
                     {
@@ -57,7 +62,9 @@ namespace TestsModelValidation.Test
                     {
                         modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Leader is required."));
                     },
-                    false));
+                    false,
+                    false);
+            });
         }
 
 
@@ -75,6 +82,7 @@ namespace TestsModelValidation.Test
                    modelSetup =>
                    {
                    },
+                   false,
                    false);
             });            
         }
@@ -96,6 +104,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith(null)            // Required
                            .IsInvalidWith("Darth Vader")); // Valid
                    },
+                   false,
                    false);
             });
         }

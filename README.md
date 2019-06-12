@@ -49,8 +49,8 @@ public void Test_Luke()
         modelSetup => 
         {
             // Test object level attributes
-            modelSetup.CheckObject(os => os.IsInvalidWith(r => r.Surname, "Organa"));
-            modelSetup.CheckObject(os => os.IsInvalidWith(r => r.Age, 42));
+            modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Surname, "Organa"));
+            modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Age, 42));
 
             // Test property level attributes
             modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));

@@ -24,6 +24,7 @@ namespace TestsModelValidation.Test
                 {
                     modelSetup.CheckProperty(r => r.Name, ps => ps.IsRequired(), false);
                 },
+                false,
                 false);
         }
 
@@ -41,6 +42,7 @@ namespace TestsModelValidation.Test
                 {
                     modelSetup.CheckProperty(r => r.Name, ps => ps.HasMaxLenght(10), false);
                 },
+                false,
                 false);
         }
 
@@ -58,6 +60,7 @@ namespace TestsModelValidation.Test
                 {
                     modelSetup.CheckProperty(r => r.Age, ps => ps.InRange(10, 900));
                 },
+                false,
                 false);
         }
     }
