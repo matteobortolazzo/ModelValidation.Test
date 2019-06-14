@@ -1,10 +1,3 @@
-| Stage      | Status  |
-|:-----------|:--------|
-| master     | [![Build status](https://matteobortolazzo.visualstudio.com/CouchDB.NET/_apis/build/status/CI%20-%20Production)](https://matteobortolazzo.visualstudio.com/CouchDB.NET/_build/latest?definitionId=15) |
-| Production | ![Release Stable status](https://matteobortolazzo.vsrm.visualstudio.com/_apis/public/Release/badge/ff4c14e0-5b2c-4782-b8ad-eb540731c000/3/4)                                                         |
-
-Install it from NuGet: [https://www.nuget.org/packages/ModelValidation.Test](https://www.nuget.org/packages/ModelValidation.Test)
-
 # ModelValidation.Test
 
 Small Framework to check that models are validated properly.
@@ -13,7 +6,14 @@ I can be also useful for a **TDD** (test driven development) approach to model d
 
 It works virtually with any testing framework!
 
-It checks that all attributes are tested.
+Install it from NuGet: [https://www.nuget.org/packages/ModelValidation.Test](https://www.nuget.org/packages/ModelValidation.Test)
+
+## Main features
+* Checks that model validation actually fails with wrong values.
+* Checks that all properties are tested.
+* Checks that all class level validation attributes are tested.
+* Checks that all property level validation attributes are tested.
+* Checks that error messages are actually correct.
 
 ## Example
 
@@ -77,12 +77,39 @@ public void Test_Stormtrooper()
 }
 ```
 
-## Extensions methods
+## Built-in extensions methods
 
 There are a some built-in extension methods to help writing properties tests faster:
 
 * `ps.IsRequired()`
 * `ps.HasMaxLenght(int)`
 * `ps.HasMinLenght(int)`
+* `ps.HasMinValue(int)`
+* `ps.HasMaxValue(int)`
 * `ps.InRange(int, int)`
+* `ps.HasMinValue(double)`
+* `ps.HasMaxValue(double)`
 * `ps.InRange(double, double)`
+
+```csharp
+// Example
+[Fact]
+ModelValidator.Test(
+    () => new Stormtrooper
+    {
+        IsCloned = true,
+        Leader = "Palpatine"
+    },
+    modelSetup =>
+    {
+        modelSetup.CheckProperty(r => r.Leader, ps => ps.IsRequired());
+    });
+```
+
+## Options
+
+The `Test` method accept an option object as third parameter.
+
+* **CheckPropertiesCoverage:** *(default: true)* Checks that all properties are tested.
+* **CheckClassAttributesCoverage:** *(default: true)* Checks that all class level attributes are tested.
+* **ServiceProviderSetupAction:** Use this function to add services to using during validation. 

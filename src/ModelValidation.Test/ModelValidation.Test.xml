@@ -4,5 +4,251 @@
         <name>ModelValidation.Test</name>
     </assembly>
     <members>
+        <member name="T:ModelValidation.Test.Exceptions.InvalidErrorMessageException">
+            <summary>
+            The exception that is thrown when the validation error is not the one expected.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.ModelIsInvalidException">
+            <summary>
+            The exception that is thrown when the input model is invalid.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.ModelIsValidException">
+            <summary>
+            The exception that is thrown when the model is still valid after the test update.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.PropertiesNotTestedException">
+            <summary>
+            The exception that is thrown a property is not tested.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.PropertyIsValidException">
+            <summary>
+            The exception that is thrown when the property is still valid after the test update.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.ServiceNotFoundException">
+            <summary>
+            The exception that is thrown when the reqeusted services has not been registered in the options.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Exceptions.ValidationAttributeNotTestedException">
+            <summary>
+            The exception that is thrown when a validation attribute is not tested.
+            </summary>
+        </member>
+        <member name="T:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions">
+            <summary>
+            Extensions methods to provide a faster developement of properties tests.
+            </summary>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.IsRequired``2(ModelValidation.Test.IModelPropertyValidatorSetup{``0,``1})">
+            <summary>
+            Tests that a property cannot be null.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMaxLenght``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.String},System.Int32)">
+            <summary>
+            Tests that the value of the property has a maximum amount of characters.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="maxLenght">The maximum amount of characters for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMinLenght``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.String},System.Int32)">
+            <summary>
+            Tests that the value of the property has a minimum amount of characters.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="minLenght">The minimum amount of characters for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMinValue``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Int32},System.Int32)">
+            <summary>
+            Tests that the numberic value of the property has a minimum value.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="min">The minumun value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMaxValue``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Int32},System.Int32)">
+            <summary>
+            Tests that the numberic value of the property has a minimum value.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="max">The maximum value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.InRange``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Int32},System.Int32,System.Int32)">
+            <summary>
+            Tests that the numberic value of the property is in a range of values.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="min">The minumun value for the property.</param>
+            <param name="max">The maximum value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMinValue``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Double},System.Double)">
+            <summary>
+            Tests that the numberic value of the property has a minimum value.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="min">The minumun value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.HasMaxValue``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Double},System.Double)">
+            <summary>
+            Tests that the numberic value of the property has a minimum value.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="max">The maximum value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Extensions.ModelPropertyValidatorSetupExtentions.InRange``1(ModelValidation.Test.IModelPropertyValidatorSetup{``0,System.Double},System.Double,System.Double)">
+            <summary>
+            Tests that the numberic value of the property is in a range of values.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="setup">The property validation setup to update.</param>
+            <param name="min">The minumun value for the property.</param>
+            <param name="max">The maximum value for the property.</param>
+            <returns>The instance of the setup.</returns>
+        </member>
+        <member name="T:ModelValidation.Test.Helpers.IServiceProviderSetup">
+            <summary>
+            Class to configure a service provider to use during validation.
+            </summary>
+        </member>
+        <member name="M:ModelValidation.Test.Helpers.IServiceProviderSetup.AddService``2">
+            <summary>
+            Adds a service of the type specified in TService with an implementation type specified in TImplementation.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Helpers.IServiceProviderSetup.AddService``1(``0)">
+            <summary>
+            Adds a service of the type specified in TService with the provided implementation.
+            </summary>
+            <typeparam name="TService">The type of the service to add.</typeparam>
+            <param name="implementation">The implementation instance to use.</param>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Helpers.IServiceProviderSetup.AddService(System.Type,System.Type)">
+            <summary>
+            Adds a service of the type specified in serviceType with an implementation type specified in implementationType.
+            </summary>
+            <param name="serviceType">The type of the service to add.</param>
+            <param name="implementationType">The type of the implementation.</param>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="M:ModelValidation.Test.Helpers.IServiceProviderSetup.AddService(System.Type,System.Object)">
+            <summary>
+            Adds a service of the type specified in serviceType with the provided implementation.
+            </summary>
+            <param name="serviceType">The type of the service to add.</param>
+            <param name="implementation">The implementation instance to use.</param>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="T:ModelValidation.Test.IModelClassValidatorSetup`1">
+            <summary>
+            Class to configure a class level validation test.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+        </member>
+        <member name="M:ModelValidation.Test.IModelClassValidatorSetup`1.IsInvalidWith``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},``0)">
+            <summary>
+            Tests that the property with the given value is not valid.
+            </summary>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="selector">Function to select the property to test.</param>
+            <param name="invalidValue">The invalid value for the property</param>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="T:ModelValidation.Test.IModelPropertyValidatorSetup`2">
+            <summary>
+            Class to configure a property level validation test.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+        </member>
+        <member name="M:ModelValidation.Test.IModelPropertyValidatorSetup`2.IsInvalidWith(`1,System.String)">
+            <summary>
+            Tests that the property with the given value is not valid.
+            </summary>
+            <param name="invalidValue">The invalid value for the property</param>
+            <param name="expectedErrorMessage">The validation error message expected.</param>
+            <returns>A reference to this instance.</returns>
+        </member>
+        <member name="T:ModelValidation.Test.IModelTestSetup`1">
+            <summary>
+            Class to configure all validation tests.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+        </member>
+        <member name="M:ModelValidation.Test.IModelTestSetup`1.CheckClass(System.Action{ModelValidation.Test.IModelClassValidatorSetup{`0}},System.String)">
+            <summary>
+            Checks that the model with the given setup is invalid.
+            </summary>
+            <param name="setup">Function to setup class level validation.</param>
+            <param name="expectedErrorMessage">The expected error message.</param>
+        </member>
+        <member name="M:ModelValidation.Test.IModelTestSetup`1.CheckProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Action{ModelValidation.Test.IModelPropertyValidatorSetup{`0,``0}},System.Boolean)">
+            <summary>
+             Checks that the model with the given property setup is invalid.
+            </summary>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="selector"></param>
+            <param name="setup">Function to setup property level validation.</param>
+            <param name="checkAttributesCoverage">If true, checks that all property's attributes are tested.</param>
+        </member>
+        <member name="T:ModelValidation.Test.ModelValidator">
+            <summary>
+            Class used to test model validation.
+            </summary>
+        </member>
+        <member name="M:ModelValidation.Test.ModelValidator.Test``1(System.Func{``0},System.Action{ModelValidation.Test.IModelTestSetup{``0}},ModelValidation.Test.ModelValidatorOptions)">
+            <summary>
+            Tests the validation of a class.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+            <param name="createValidModelFunc">Function that return a valid model object.</param>
+            <param name="setupAction">Function to configure the tests.</param>
+            <param name="options">Options to use during the validation.</param>
+        </member>
+        <member name="T:ModelValidation.Test.ModelValidatorOptions">
+            <summary>
+            Represent the model validator options to use during validation.
+            </summary>
+        </member>
+        <member name="P:ModelValidation.Test.ModelValidatorOptions.CheckPropertiesCoverage">
+            <summary>
+            If true, the validator checks if all property are tested.
+            </summary>
+        </member>
+        <member name="P:ModelValidation.Test.ModelValidatorOptions.CheckClassAttributesCoverage">
+            <summary>
+            If true, the validation checks that all class level attributes are tested.
+            </summary>
+        </member>
+        <member name="P:ModelValidation.Test.ModelValidatorOptions.ServiceProviderSetupAction">
+            <summary>
+            Function to set up the service provider to use during validation.
+            </summary>
+        </member>
     </members>
 </doc>
