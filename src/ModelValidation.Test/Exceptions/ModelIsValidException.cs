@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ModelValidation.Test.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when the model is still valid after the test update.
+    /// </summary>
     public class ModelIsValidException : Exception
     {
         internal ModelIsValidException()

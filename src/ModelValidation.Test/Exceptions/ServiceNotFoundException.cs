@@ -4,17 +4,20 @@ using System.Text;
 
 namespace ModelValidation.Test.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when the reqeusted services has not been registered in the options.
+    /// </summary>
     public class ServiceNotFoundException : Exception
     {
-        public ServiceNotFoundException()
+        internal ServiceNotFoundException()
         {
         }
 
-        public ServiceNotFoundException(string message) : base(message)
+        internal ServiceNotFoundException(string message) : base(message)
         {
         }
 
-        public ServiceNotFoundException(string message, Exception innerException) : base(message, innerException)
+        internal ServiceNotFoundException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

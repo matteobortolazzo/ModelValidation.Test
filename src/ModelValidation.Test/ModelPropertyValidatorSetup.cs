@@ -7,16 +7,27 @@ using ModelValidation.Test.Exceptions;
 
 namespace ModelValidation.Test
 {
+    /// <summary>
+    /// Class to configure a property level validation test.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the model.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    public interface IModelPropertyValidatorSetup<TModel, TProperty>
+    {
+        /// <summary>
+        /// Tests that the property with the given value is not valid.
+        /// </summary>
+        /// <param name="invalidValue">The invalid value for the property</param>
+        /// <param name="expectedErrorMessage">The validation error message expected.</param>
+        /// <returns>A reference to this instance.</returns>
+        IModelPropertyValidatorSetup<TModel, TProperty> IsInvalidWith(TProperty invalidValue, string expectedErrorMessage = null);
+    }
+
     internal interface IModelPropertyValidator
     {
         bool CheckAttributesCoverage { get; }
         void RunTest(object model, object value, string message, IServiceProvider serviceProvider);
         IReadOnlyCollection<(object Value, string Message)> GetInvalidValues();
-    }
-
-    public interface IModelPropertyValidatorSetup<TModel, TProperty>
-    {
-        IModelPropertyValidatorSetup<TModel, TProperty> IsInvalidWith(TProperty invalidValue, string expectedErrorMessage = null);
     }
 
     internal class ModelPropertyValidatorSetup<TModel, TProperty> : IModelPropertyValidatorSetup<TModel, TProperty>, IModelPropertyValidator

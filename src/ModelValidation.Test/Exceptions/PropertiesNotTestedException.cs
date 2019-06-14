@@ -4,17 +4,20 @@ using System.Text;
 
 namespace ModelValidation.Test.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown a property is not tested.
+    /// </summary>
     public class PropertiesNotTestedException : Exception
     {
-        public PropertiesNotTestedException()
+        internal PropertiesNotTestedException()
         {
         }
 
-        public PropertiesNotTestedException(string message) : base(message)
+        internal PropertiesNotTestedException(string message) : base(message)
         {
         }
 
-        public PropertiesNotTestedException(string message, Exception innerException) : base(message, innerException)
+        internal PropertiesNotTestedException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

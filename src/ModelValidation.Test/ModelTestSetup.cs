@@ -9,9 +9,26 @@ using ModelValidation.Test.Helpers;
 
 namespace ModelValidation.Test
 {
+    /// <summary>
+    /// Class to configure all validation tests.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the model.</typeparam>
     public interface IModelTestSetup<TModel>
     {
+        /// <summary>
+        /// Checks that the model with the given setup is invalid.
+        /// </summary>
+        /// <param name="setup">Function to setup class level validation.</param>
+        /// <param name="expectedErrorMessage">The expected error message.</param>
         void CheckClass(Action<IModelClassValidatorSetup<TModel>> setup, string expectedErrorMessage = null);
+
+        /// <summary>
+        ///  Checks that the model with the given property setup is invalid.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="selector"></param>
+        /// <param name="setup">Function to setup property level validation.</param>
+        /// <param name="checkAttributesCoverage">If true, checks that all property's attributes are tested.</param>
         void CheckProperty<TProperty>(Expression<Func<TModel, TProperty>> selector, Action<IModelPropertyValidatorSetup<TModel, TProperty>> setup, bool checkAttributesCoverage = true);
     }
 

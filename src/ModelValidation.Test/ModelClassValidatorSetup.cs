@@ -8,15 +8,26 @@ using ModelValidation.Test.Exceptions;
 
 namespace ModelValidation.Test
 {
+    /// <summary>
+    /// Class to configure a class level validation test.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the model.</typeparam>
+    public interface IModelClassValidatorSetup<TModel>
+    {
+        /// <summary>
+        /// Tests that the property with the given value is not valid.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="selector">Function to select the property to test.</param>
+        /// <param name="invalidValue">The invalid value for the property</param>
+        /// <returns>A reference to this instance.</returns>
+        IModelClassValidatorSetup<TModel> IsInvalidWith<TProperty>(Expression<Func<TModel, TProperty>> selector, TProperty invalidValue);
+    }
+
     internal interface IModelClassValidator
     {
         void RunTest(object model, IServiceProvider serviceProvider);
         object SetValues(object model);
-    }
-
-    public interface IModelClassValidatorSetup<TModel>
-    {
-        IModelClassValidatorSetup<TModel> IsInvalidWith<TProperty>(Expression<Func<TModel, TProperty>> selector, TProperty invalidValue);
     }
 
     internal class ModelClassValidatorSetup<TModel> : IModelClassValidatorSetup<TModel>, IModelClassValidator

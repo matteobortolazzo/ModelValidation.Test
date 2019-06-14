@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ModelValidation.Test.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when the input model is invalid.
+    /// </summary>
     public class ModelIsInvalidException : Exception
     {
         internal ModelIsInvalidException()
