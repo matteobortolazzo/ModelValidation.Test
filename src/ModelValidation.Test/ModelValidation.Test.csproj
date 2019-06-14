@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ModelValidation.Test.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" PrivateAssets="all" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>

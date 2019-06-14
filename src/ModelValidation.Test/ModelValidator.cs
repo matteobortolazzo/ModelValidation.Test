@@ -1,4 +1,5 @@
 ﻿using System;
+using ModelValidation.Test.Helpers;
 
 namespace ModelValidation.Test
 {
@@ -6,18 +7,23 @@ namespace ModelValidation.Test
     {
         public static void Test<TModel>(
             Func<TModel> createValidModelFunc, 
-            Action<IModelTestSetup<TModel>> setupAction, 
-            bool checkPropertiesCoverage = true, 
-            bool checkClassAttributesCoverage = true) where TModel : class
+            Action<IModelTestSetup<TModel>> setupAction,
+            ModelValidatorOptions options = null) where TModel : class
         {
             if (setupAction == null)
             {
                 throw new ArgumentNullException(nameof(setupAction));
             }
 
+            if (options == null)
+            {
+                options = new ModelValidatorOptions();
+            }
+
             var setup = new ModelTestSetup<TModel>(createValidModelFunc);
             setupAction(setup);
-            setup.Run(checkPropertiesCoverage, checkClassAttributesCoverage);
+
+            setup.Run(options);
         }
     }
 }

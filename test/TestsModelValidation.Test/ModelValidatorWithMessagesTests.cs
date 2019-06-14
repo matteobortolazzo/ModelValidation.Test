@@ -8,6 +8,12 @@ namespace TestsModelValidation.Test
 {
     public class ModelValidatorWithMessagesTests
     {
+        private readonly ModelValidatorOptions _skipConverageChecksOptions = new ModelValidatorOptions
+        {
+            CheckClassAttributesCoverage = false,
+            CheckPropertiesCoverage = false
+        };
+
         [Fact]
         public void Complete_Succeed()
         {
@@ -23,8 +29,7 @@ namespace TestsModelValidation.Test
 
                     modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Sith leader is required."));
                 },
-                false,
-                false);
+                _skipConverageChecksOptions);
         }
 
         [Fact]
@@ -42,8 +47,7 @@ namespace TestsModelValidation.Test
                      {
                          modelSetup.CheckClass(os => os.IsInvalidWith(r => r.IsCloned, false), "Trooper should be a clone.");
                      },
-                     false,
-                     false);
+                    _skipConverageChecksOptions);   
             });
         }
 
@@ -62,8 +66,7 @@ namespace TestsModelValidation.Test
                     {
                         modelSetup.CheckProperty(r => r.Leader, ps => ps.IsInvalidWith(null, "Leader is required."));
                     },
-                    false,
-                    false);
+                    _skipConverageChecksOptions);
             });
         }
 
@@ -82,8 +85,7 @@ namespace TestsModelValidation.Test
                    modelSetup =>
                    {
                    },
-                   false,
-                   false);
+                    _skipConverageChecksOptions);
             });            
         }
 
@@ -104,8 +106,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith(null)            // Required
                            .IsInvalidWith("Darth Vader")); // Valid
                    },
-                   false,
-                   false);
+                    _skipConverageChecksOptions);
             });
         }
     }

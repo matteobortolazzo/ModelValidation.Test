@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,7 @@ namespace ModelValidation.Test
     internal interface IModelPropertyValidator
     {
         bool CheckAttributesCoverage { get; }
-        void RunTest(object model, object value, string message);
+        void RunTest(object model, object value, string message, IServiceProvider serviceProvider);
         IReadOnlyCollection<(object Value, string Message)> GetInvalidValues();
     }
 
@@ -43,12 +44,12 @@ namespace ModelValidation.Test
 
         public bool CheckAttributesCoverage { get; }
 
-        public void RunTest(object model, object value, string expectedErrorMessage)
+        public void RunTest(object model, object value, string expectedErrorMessage, IServiceProvider serviceProvider)
         {
             _propertyInfo.SetValue(model, value);
 
             var validationResults = new List<ValidationResult>(); 
-            var isValid = Validator.TryValidateObject(model, new ValidationContext(model), validationResults, true);
+            var isValid = Validator.TryValidateObject(model, new ValidationContext(model, serviceProvider, null), validationResults, true);
 
             if (isValid)
             {

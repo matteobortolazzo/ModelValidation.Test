@@ -8,6 +8,12 @@ namespace TestsModelValidation.Test
 {
     public class ModelValidatorTests
     {
+        private readonly ModelValidatorOptions _skipConverageChecksOptions = new ModelValidatorOptions
+        {
+            CheckClassAttributesCoverage = false,
+            CheckPropertiesCoverage = false
+        };
+
         [Fact]
         public void Complete_Succeed()
         {
@@ -46,8 +52,11 @@ namespace TestsModelValidation.Test
                         modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
                         modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
                     },
-                    true,
-                    false);
+                    new ModelValidatorOptions
+                    {
+                        CheckClassAttributesCoverage = false,
+                        CheckPropertiesCoverage = true
+                    });
             });
         }
 
@@ -66,8 +75,11 @@ namespace TestsModelValidation.Test
                     modelSetup =>
                     {
                     },
-                    false,
-                    true);
+                    new ModelValidatorOptions
+                    {
+                        CheckClassAttributesCoverage = true,
+                        CheckPropertiesCoverage = false
+                    });
             });
         }
 
@@ -88,8 +100,7 @@ namespace TestsModelValidation.Test
                     {
                         modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith("Lukelongname")); // Missing null check
                     },
-                    false,
-                    false);
+                    _skipConverageChecksOptions);
             });
         }
 
@@ -110,8 +121,7 @@ namespace TestsModelValidation.Test
                        modelSetup.CheckProperty(r => r.Name, ps => ps
                            .IsInvalidWith("01234567890")); // MaxLenght
                    },
-                   false,
-                   false);
+                   _skipConverageChecksOptions);
             });
         }
 
@@ -129,8 +139,7 @@ namespace TestsModelValidation.Test
                    modelSetup =>
                    {
                    },
-                   false,
-                   false);
+                   _skipConverageChecksOptions);
             });            
         }
 
@@ -153,8 +162,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
                    },
-                   false,
-                   false);
+                   _skipConverageChecksOptions);
             });
         }
 
@@ -179,8 +187,7 @@ namespace TestsModelValidation.Test
                            .IsInvalidWith("01234567890") // MaxLenght
                            .IsInvalidWith("Anakin"));    // Valid
                    },
-                   false,
-                   false);
+                   _skipConverageChecksOptions);
             });
         }
     }

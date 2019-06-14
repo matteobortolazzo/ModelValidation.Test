@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using ModelValidation.Test.Exceptions;
+using ModelValidation.Test.Helpers;
 
 namespace ModelValidation.Test
 {
@@ -47,28 +48,31 @@ namespace ModelValidation.Test
             _propertyLevelValidators.Add((propertyInfo, validator));
         }
 
-        public void Run(bool checkPropertiesCoverage, bool checkClassAttributesCoverage)
+        public void Run(ModelValidatorOptions options)
         {
-            CheckIfModelIsValid();
+            var serviceProvider = new TestServiceProvider();
+            options.ServiceProviderSetupAction?.Invoke(serviceProvider);
 
-            if (checkPropertiesCoverage)
+            CheckIfModelIsValid(serviceProvider);
+
+            if (options.CheckPropertiesCoverage)
             {
                 CheckPropertiesCoverage();
             }
 
-            if (checkClassAttributesCoverage)
+            if (options.CheckClassAttributesCoverage)
             {
-                CheckClassAttributesCoverage();
+                CheckClassAttributesCoverage(serviceProvider);
             }
 
-            CheckClassLevelAttributes();
-            CheckPropertyLevelAttributes();
+            CheckClassLevelAttributes(serviceProvider);
+            CheckPropertyLevelAttributes(serviceProvider);
         }
 
-        private void CheckIfModelIsValid()
+        private void CheckIfModelIsValid(IServiceProvider serviceProvider)
         {
             TModel validModel = _createValidModelFunc();
-            var isValid = Validator.TryValidateObject(validModel, new ValidationContext(validModel), null, true);
+            var isValid = Validator.TryValidateObject(validModel, new ValidationContext(validModel, serviceProvider, null), null, true);
 
             if (!isValid)
             {
@@ -88,27 +92,40 @@ namespace ModelValidation.Test
             }
         }
 
-        private void CheckClassAttributesCoverage()
+        private void CheckClassAttributesCoverage(IServiceProvider serviceProvider)
         {
             var classValidationAttributes = typeof(TModel).GetCustomAttributes<ValidationAttribute>(true).ToList();
             foreach (ValidationAttribute validationAttribute in classValidationAttributes)
             {
-                if (_classLevelValidators.All(v => validationAttribute.IsValid(v.SetValues(_createValidModelFunc()))))
+                var validationContext = new ValidationContext(_createValidModelFunc(), serviceProvider, null);
+                if (_classLevelValidators.All(model => 
+                    {
+                        var invalidModel = model.SetValues(_createValidModelFunc());
+                        try
+                        {
+                            validationAttribute.Validate(invalidModel, validationContext);
+                            return true;
+                        }
+                        catch (ValidationException e)
+                        {
+                            return false;
+                        }
+                    }))
                 {
                     throw new ValidationAttributeNotTestedException($"{validationAttribute.GetType().Name} is not tested.");
                 }
             }
         }
 
-        private void CheckClassLevelAttributes()
+        private void CheckClassLevelAttributes(IServiceProvider serviceProvider)
         {
             foreach (IModelClassValidator validator in _classLevelValidators)
             {
-                validator.RunTest(_createValidModelFunc());
+                validator.RunTest(_createValidModelFunc(), serviceProvider);
             }
         }
 
-        private void CheckPropertyLevelAttributes()
+        private void CheckPropertyLevelAttributes(IServiceProvider serviceProvider)
         {
             foreach ((PropertyInfo PropertyInfo, IModelPropertyValidator Validator) in _propertyLevelValidators)
             {
@@ -118,7 +135,19 @@ namespace ModelValidation.Test
                     var propertyValidationAttributes = PropertyInfo.GetCustomAttributes<ValidationAttribute>(true).ToList();
                     foreach (ValidationAttribute validationAttribute in propertyValidationAttributes)
                     {
-                        if (invalidValues.All(property => validationAttribute.IsValid(property.Value)))
+                        var validationContext = new ValidationContext(_createValidModelFunc(), serviceProvider, null);
+                        if (invalidValues.All(property => 
+                            {
+                                try
+                                {
+                                    validationAttribute.Validate(property.Value, validationContext);
+                                    return true;
+                                }
+                                catch (ValidationException e)
+                                {
+                                    return false;
+                                }
+                            }))
                         {
                             throw new ValidationAttributeNotTestedException($"{validationAttribute.GetType().Name} is not tested.");
                         }
@@ -127,7 +156,7 @@ namespace ModelValidation.Test
 
                 foreach ((var Value, var Message) in Validator.GetInvalidValues())
                 {
-                    Validator.RunTest(_createValidModelFunc(), Value, Message);
+                    Validator.RunTest(_createValidModelFunc(), Value, Message, serviceProvider);
                 }
             }
         }

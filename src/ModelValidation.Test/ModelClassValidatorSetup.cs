@@ -10,7 +10,7 @@ namespace ModelValidation.Test
 {
     internal interface IModelClassValidator
     {
-        void RunTest(object model);
+        void RunTest(object model, IServiceProvider serviceProvider);
         object SetValues(object model);
     }
 
@@ -42,12 +42,12 @@ namespace ModelValidation.Test
             return this;
         }
         
-        public void RunTest(object model)
+        public void RunTest(object model, IServiceProvider serviceProvider)
         {
             model = SetValues(model);
 
             var validationResults = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(model, new ValidationContext(model), validationResults, true);
+            var isValid = Validator.TryValidateObject(model, new ValidationContext(model, serviceProvider, null), validationResults, true);
 
             if (isValid)
             {
