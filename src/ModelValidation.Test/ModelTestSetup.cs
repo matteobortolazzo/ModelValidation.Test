@@ -106,7 +106,7 @@ namespace ModelValidation.Test
                             validationAttribute.Validate(invalidModel, validationContext);
                             return true;
                         }
-                        catch (ValidationException e)
+                        catch (ValidationException)
                         {
                             return false;
                         }
@@ -143,7 +143,7 @@ namespace ModelValidation.Test
                                     validationAttribute.Validate(property.Value, validationContext);
                                     return true;
                                 }
-                                catch (ValidationException e)
+                                catch (ValidationException)
                                 {
                                     return false;
                                 }
