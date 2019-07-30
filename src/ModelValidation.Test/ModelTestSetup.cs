@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using ModelValidation.Test.Exceptions;
+using ModelValidation.Test.Extensions;
 using ModelValidation.Test.Helpers;
 
 namespace ModelValidation.Test
@@ -148,16 +149,19 @@ namespace ModelValidation.Test
             {
                 if (Validator.CheckAttributesCoverage)
                 {
-                    IReadOnlyCollection<(object Value, string Message)> invalidValues = Validator.GetInvalidValues();
+                    IReadOnlyCollection<(object TransformFunction, string Message)> invalidValues = Validator.GetInvalidValues();
                     var propertyValidationAttributes = PropertyInfo.GetCustomAttributes<ValidationAttribute>(true).ToList();
                     foreach (ValidationAttribute validationAttribute in propertyValidationAttributes)
                     {
-                        var validationContext = new ValidationContext(_createValidModelFunc(), serviceProvider, null);
+                        TModel validModel = _createValidModelFunc();
+                        var validationContext = new ValidationContext(validModel, serviceProvider, null);
                         if (invalidValues.All(property => 
                             {
+                                var propertyValue = property.TransformFunction.GetUpdatedProperty(validModel, PropertyInfo);
+
                                 try
                                 {
-                                    validationAttribute.Validate(property.Value, validationContext);
+                                    validationAttribute.Validate(propertyValue, validationContext);
                                     return true;
                                 }
                                 catch (ValidationException)
@@ -171,9 +175,10 @@ namespace ModelValidation.Test
                     }
                 }
 
-                foreach ((var Value, var Message) in Validator.GetInvalidValues())
+                foreach ((var Action, var Message) in Validator.GetInvalidValues())
                 {
-                    Validator.RunTest(_createValidModelFunc(), Value, Message, serviceProvider);
+                    var validModel = _createValidModelFunc();
+                    Validator.RunTest(validModel, Action, Message, serviceProvider);
                 }
             }
         }

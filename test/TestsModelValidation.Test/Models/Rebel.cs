@@ -18,5 +18,13 @@ namespace TestsModelValidation.Test.Models
 
         [Range(10, 900)]
         public int Age { get; set; }
+
+        [RebelWeapon]
+        public Weapon Weapon { get; set; }
+    }
+
+    public class Weapon
+    {
+        public string Color { get; set; }
     }
 }

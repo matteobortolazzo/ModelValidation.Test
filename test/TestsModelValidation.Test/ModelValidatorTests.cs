@@ -22,7 +22,11 @@ namespace TestsModelValidation.Test
                 {
                     Name = "Luke",
                     Surname = "Skywalker",
-                    Age = 18
+                    Age = 18,
+                    Weapon = new Weapon
+                    {
+                        Color = "Green"
+                    }
                 },
                 modelSetup => 
                 {
@@ -32,6 +36,12 @@ namespace TestsModelValidation.Test
                     modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
                     modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
                     modelSetup.CheckProperty(r => r.Age, ps => ps.IsInvalidWith(901).IsInvalidWith(9));
+
+                    modelSetup.CheckProperty(r => r.Weapon, ps => ps.IsInvalidWithTransform(w =>
+                    {
+                        w.Color = "Red";
+                        return w;
+                    }));
                 });
         }
 

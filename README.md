@@ -32,29 +32,44 @@ public class Rebel
 
     [Range(10, 900)]
     public int Age { get; set; }
+
+    [RebelWeapon] // Color == "Green"
+    public Weapon Weapon { get; set; }
+}
+
+public class Weapon
+{
+    public string Color { get; set; }
 }
 
 [Fact]
 public void Test_Luke()
 {
     ModelValidator.Test(
-        // Create valid model function
         () => new Rebel
         {
             Name = "Luke",
             Surname = "Skywalker",
-            Age = 18
+            Age = 18,
+            Weapon = new Weapon
+            {
+                Color = "Green"
+            }
         },
-        // Test setup function
         modelSetup => 
         {
-            // Test object level attributes
             modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Surname, "Organa"));
             modelSetup.CheckClass(os => os.IsInvalidWith(r => r.Age, 42));
 
-            // Test property level attributes
             modelSetup.CheckProperty(r => r.Name, ps => ps.IsInvalidWith(null).IsInvalidWith("Lukelongname"));
+            modelSetup.CheckProperty(r => r.Surname, ps => ps.IsInvalidWith(null));
             modelSetup.CheckProperty(r => r.Age, ps => ps.IsInvalidWith(901).IsInvalidWith(9));
+
+            modelSetup.CheckProperty(r => r.Weapon, ps => ps.IsInvalidWithTransform(w =>
+            {
+                w.Color = "Red";
+                return w;
+            }));
         });
 }
 

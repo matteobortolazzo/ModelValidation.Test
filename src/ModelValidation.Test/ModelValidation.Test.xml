@@ -194,6 +194,14 @@
             <param name="expectedErrorMessage">The validation error message expected.</param>
             <returns>A reference to this instance.</returns>
         </member>
+        <member name="M:ModelValidation.Test.IModelPropertyValidatorSetup`2.IsInvalidWithTransform(System.Func{`1,`1},System.String)">
+            <summary>
+            Tests that the property with the given value is not valid.
+            </summary>
+            <param name="transformFunction">Function that represent a trasformation of the property value.</param>
+            <param name="expectedErrorMessage">The validation error message expected.</param>
+            <returns>A reference to this instance.</returns>
+        </member>
         <member name="T:ModelValidation.Test.IModelTestSetup`1">
             <summary>
             Class to configure all validation tests.
