@@ -7,14 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8FC4298
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsModelValidation.Test", "test\TestsModelValidation.Test\TestsModelValidation.Test.csproj", "{9DEA572C-BF9F-42F3-A05B-E75C9BD57F79}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{AC1C933B-119E-453A-8383-6D925839CB48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelValidation.Test", "src\ModelValidation.Test\ModelValidation.Test.csproj", "{19B92485-32D3-47FD-A954-126C9973C563}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12C6FA0A-5158-4CC0-95E8-F6930F9C95FB}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		CHANGELOG.md = CHANGELOG.md
 		LATEST_CHANGE.md = LATEST_CHANGE.md
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelValidation.Test", "src\ModelValidation.Test\ModelValidation.Test.csproj", "{19B92485-32D3-47FD-A954-126C9973C563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
